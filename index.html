@@ -1,79 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>License Plate Detection</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        #result {
-            margin-top: 20px;
-        }
-        img {
-            max-width: 400px;
-            margin-top: 10px;
-        }
-    </style>
+    <title>Модель YOLOv8 - Предсказания</title>
+
 </head>
 <body>
-
-    <h1>License Plate Recognition</h1>
-
-    <form id="uploadForm">
-        <label for="imageFile">Choose an image (JPEG or PNG):</label><br>
-        <input type="file" id="imageFile" accept="image/*"><br><br>
-        <button type="submit">Upload and Detect</button>
-    </form>
-
-    <div id="result"></div>
-
-    <script>
-        const form = document.getElementById('uploadForm');
-        const resultDiv = document.getElementById('result');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Предотвращаем перезагрузку страницы
-
-            const fileInput = document.getElementById('imageFile');
-            const file = fileInput.files[0];
-
-            if (!file) {
-                resultDiv.innerHTML = "Please select an image file.";
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            try {
-                // Отправляем POST-запрос на API
-                const response = await fetch('http://localhost:8000/home/', {
-                    method: 'POST',
-                    body: formData,
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-
-                // Отображаем результаты
-                resultDiv.innerHTML = `<h3>Detection Results:</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
-
-                // Показ загруженного изображения
-                const imgElement = document.createElement('img');
-                imgElement.src = URL.createObjectURL(file);
-                resultDiv.appendChild(imgElement);
-
-            } catch (error) {
-                resultDiv.innerHTML = `Error: ${error.message}`;
-            }
-        });
-    </script>
+    <div class="container">
+        <header>
+            <h1>Предсказания с использованием YOLOv8</h1>
+        </header>
+        <main>
+            <form id="upload-form">
+                <input type="file" id="image-upload" accept="image/*" required>
+                <button type="submit">Загрузить и предсказать</button>
+            </form>
+            <div id="results" class="results hidden">
+                <h2>Результаты предсказания</h2>
+                <ul id="results-list"></ul>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2024 Все права защищены.</p>
+        </footer>
+    </div>
 
 </body>
 </html>
