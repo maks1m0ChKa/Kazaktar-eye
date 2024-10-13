@@ -18,7 +18,7 @@ app.add_middleware(
 )
 
 # Загружаем модель напрямую с помощью пакета Ultralytics
-model = YOLO('yolov8n.pt')  # Замените на путь к нужному файлу модели
+model = YOLO('yolov8n.pt')
 
 @app.post("/predict/")
 async def predict(file: UploadFile = File(...)):
@@ -44,9 +44,8 @@ async def train(dataset: UploadFile = File(...)):
         with open(dataset_path, "wb") as buffer:
             shutil.copyfileobj(dataset.file, buffer)
 
-        # Запустите обучение
-        # Убедитесь, что у вас настроен соответствующий файл конфигурации для обучения
-        os.system(f"yolo train model=yolov8n.pt data={dataset_path} epochs=50")  # Настройте путь к вашей модели и датасету
+
+        os.system(f"yolo train model=yolov8n.pt data={dataset_path} epochs=50")
 
         return {"message": "Обучение завершено"}
     except Exception as e:
@@ -55,5 +54,5 @@ async def train(dataset: UploadFile = File(...)):
 
 if __name__ == "__main__":
     if not os.path.exists("datasets/"):
-        os.makedirs("datasets/")  # Создайте папку для хранения датасетов
+        os.makedirs("datasets/")
     uvicorn.run(app, host="0.0.0.0", port=8000)
