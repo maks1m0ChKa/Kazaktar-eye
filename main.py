@@ -20,8 +20,15 @@ app.add_middleware(
 # Загружаем модель напрямую с помощью пакета Ultralytics
 model = YOLO('yolov8n.pt')
 
+# Главная страница
+@app.get("/")
+async def root():
+    return {"message": "API работает"}
+
+# Эндпоинт для предсказаний
 @app.post("/predict/")
 async def predict(file: UploadFile = File(...)):
+    print("check sucs")
     try:
         # Загружаем изображение
         img = await file.read()
@@ -33,9 +40,11 @@ async def predict(file: UploadFile = File(...)):
         predictions = results.pandas().xyxy[0].to_dict(orient="records")
         return JSONResponse(content={"predictions": predictions})
     except Exception as e:
+        print("HYU APPLE")
         # Обработка ошибок
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+# Эндпоинт для обучения модели
 @app.post("/train/")
 async def train(dataset: UploadFile = File(...)):
     try:
@@ -44,7 +53,7 @@ async def train(dataset: UploadFile = File(...)):
         with open(dataset_path, "wb") as buffer:
             shutil.copyfileobj(dataset.file, buffer)
 
-
+        # Запуск обучения модели
         os.system(f"yolo train model=yolov8n.pt data={dataset_path} epochs=50")
 
         return {"message": "Обучение завершено"}

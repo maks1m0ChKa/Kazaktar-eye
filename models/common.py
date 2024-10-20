@@ -1,5 +1,4 @@
-# Ultralytics YOLOv5 🚀, AGPL-3.0 license
-"""Common modules."""
+
 
 import ast
 import contextlib
@@ -22,7 +21,6 @@ import torch.nn as nn
 from PIL import Image
 from torch.cuda import amp
 
-# Import 'ultralytics' package or install if missing
 try:
     import ultralytics
 
